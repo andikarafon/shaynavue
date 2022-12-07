@@ -25,23 +25,21 @@
                               <div class="row">
                                   <div class="col-lg-6">
                                       <div class="product-pic-zoom">
-                                          <Carousel id="gallery" :items-to-show="1" :wrap-around="false" v-model="currentSlide">
-                                            <Slide v-for="ss in productDetails.galleries" :key="ss.id">
-                                              <div class="carousel__item">
-                                                <img class="product-big-img" :src="ss.photo" alt="" />
-                                              </div>
-                                            </Slide>
-                                          </Carousel>
+                                         <img class="product-big-img" :src="gambar_default" alt />
                                       </div>
                                       <div class="product-thumbs">
-                                        <carousel id="thumbnails" :items-to-show="3" :wrap-around="true" v-model="currentSlide" ref="carousel">
+                                        <carousel id="thumbnails" :items-to-show="3">
                                           <slide v-for="ss in productDetails.galleries" :key="ss.id" class="pt">
                                             <div class="carousel__item">
-                                              <div class="pt" @click="slideTo(ss.id)" :class="ss.id == currentSlide ? 'active' : '' ">
+                                              <div class="pt" @click="changeImage(ss.photo)"  :class="ss.photo == gambar_default ? 'active' : '' ">
                                                  <img :src="ss.photo" alt="" />
                                              </div>
                                             </div>
                                           </slide>
+                                          <template #addons>
+                                            <navigation />
+                                            <pagination />
+                                          </template>
                                         </carousel>
                                       </div>
                                 </div>
@@ -79,7 +77,7 @@
   import RelatedShayna from "@/components/RelatedShayna.vue";
 
   import "vue3-carousel/dist/carousel.css";
-  import { Carousel, Slide } from 'vue3-carousel';
+  import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel';
 
   import axios from "axios";
   
@@ -91,10 +89,11 @@
       HeaderShayna, 
       FooterShayna,
       RelatedShayna,
-      Carousel, Slide
+      Carousel, Slide, Pagination, Navigation
     },
                     data () {
                       return {
+                        gambar_default: "",
                         productDetails: [],
                         currentSlide: 0
                       };
@@ -103,11 +102,14 @@
                       slideTo(val) {
                         this.currentSlide = val
                       },
+                      changeImage(urlImage) {
+                        this.gambar_default = urlImage;
+                      },
                       setDataPicture(data) {
                         // replace object productDetails dengan data dari API
                         this.productDetails = data;
                         // replace value gambar default dengan data dari API (galleries)
-                        // this.gambar_default = data.galleries[0].photo;
+                        this.gambar_default = data.galleries[0].photo;
                       }
                     },
                     mounted() {
