@@ -3,29 +3,32 @@
   <section class="women-banner spad">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-12 mt-5">
+                <div class="col-lg-12 mt-5" v-if="products.length > 0" > 
                     <carousel items-to-show="3"  :autoplay="2000" :wrap-around="true">
-                        <slide v-for="slide in slides" :key="slide.id">
+                        <slide v-for="itemProduct in products" v-bind:key="itemProduct.id">
                             <div class="carousel__item">
                                 <div class="single-hero-items set-bg">
                                     <div class="product-item">
                                         <div class="pi-pic">
-                                            <img :src="slide.img_url" alt="" />
+                                            <img v-bind:src="itemProduct.galleries[0].photo" alt />
                                             <ul>
                                               <li class="w-icon active">
                                                   <a href="#"><i class="icon_bag_alt"></i></a>
                                               </li>
                                                 <li class="quick-view">
-                                                    <router-link v-bind:to="'/product'">+ Quick View</router-link>
+                                                    <router-link v-bind:to="'/product/'+itemProduct.id">+ Quick View</router-link>
                                                 </li>
                                             </ul>
                                         </div>
                                         <div class="pi-text">
-                                            <div class="catagory-name">{{ slide.name }}</div>
-                                            <a href="#">
-                                            </a>
+                                            <div class="catagory-name">{{ itemProduct.type  }}</div>
+                                            <router-link to="/product">
+                                              <a href="#">
+                                                <h5>{{ itemProduct.name }}</h5>
+                                              </a>
+                                            </router-link>
                                             <div class="product-price">
-                                                $14.00
+                                              ${{ itemProduct.price }}
                                                 <span>$35.00</span>
                                             </div>
                                         </div>
@@ -34,6 +37,10 @@
                             </div>
                         </slide>
                     </carousel>
+                </div>
+                <div class="col-lg-12" v-else>
+                    <p>Produk belum tersedia untuk saat ini...!!</p>
+                    <p>{{ products.length }}</p>
                 </div>
             </div>
         </div>
@@ -47,6 +54,8 @@
 import "vue3-carousel/dist/carousel.css";
 import { Carousel, Slide } from 'vue3-carousel';
 
+import axios from "axios";
+
 
 
 export default {
@@ -54,32 +63,18 @@ export default {
   components: {    
     Carousel, Slide
   },
-  data: function() {
-        return {
-          slides: [
-            {
-              id: 0,
-              img_url :  'img/mickey1.jpg',
-              name    : 'Mickey 1'
-            },
-            {
-              id: 1,
-              img_url : 'img/products/women-2.jpg',
-              name    : 'Woman 2'
-            },
-            {
-              id: 2,
-              img_url : 'img/products/women-3.jpg',
-              name    : 'Woman 3'
-            },
-            {
-              id: 3,
-              img_url : 'img/products/women-4.jpg',
-              name    : 'Woman 4'
-            }
-          ]
-        };
-  }  //end of data function
+  data() {
+    return {
+      products: []
+    };
+  }, 
+  mounted() {
+    axios
+      .get("http://shayna-backend.belajarkoding.com/api/products")
+      .then(res => (this.products = res.data.data.data))
+      // eslint-disable-next-line no-console
+      .catch(err => console.log(err));
+  }
 }
 </script>
 
