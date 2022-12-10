@@ -28,7 +28,7 @@
                                          <img class="product-big-img" :src="gambar_default" alt />
                                       </div>
                                       <div class="product-thumbs">
-                                        <carousel id="thumbnails" :items-to-show="3">
+                                        <carousel :items-to-show="3" :wrap-around="true">
                                           <slide v-for="ss in productDetails.galleries" :key="ss.id" class="pt">
                                             <div class="carousel__item">
                                               <div class="pt" @click="changeImage(ss.photo)"  :class="ss.photo == gambar_default ? 'active' : '' ">
@@ -54,7 +54,10 @@
                                             <h4>${{ productDetails.price }}</h4>
                                           </div>
                                           <div class="quantity">
-                                            <router-link v-bind:to="'/cart'"  class="primary-btn pd-cart">Add To Cart</router-link>
+                                            <router-link v-bind:to="'/cart'">
+                                                <a @click="saveKeranjang(productDetails.id, productDetails.name, productDetails.price, productDetails.galleries[0].photo)" href="#"
+                                                    class="primary-btn pd-cart">Add To Cart</a>
+                                            </router-link>
                                           </div>
                                       </div>
                                   </div>
@@ -95,13 +98,10 @@
                       return {
                         gambar_default: "",
                         productDetails: [],
-                        currentSlide: 0
+                        keranjangUser: []
                       };
                     },  //end of data function
                     methods: {
-                      slideTo(val) {
-                        this.currentSlide = val
-                      },
                       changeImage(urlImage) {
                         this.gambar_default = urlImage;
                       },
@@ -110,9 +110,30 @@
                         this.productDetails = data;
                         // replace value gambar default dengan data dari API (galleries)
                         this.gambar_default = data.galleries[0].photo;
-                      }
-                    },
+                      },
+                          saveKeranjang(idProduct, nameProduct, priceProduct, photoProduct) {
+
+                            var productStored = {
+                              "id": idProduct,
+                              "name": nameProduct,
+                              "price": priceProduct,
+                              "photo": photoProduct
+                            }
+
+                            this.keranjangUser.push(productStored);
+                            const parsed = JSON.stringify(this.keranjangUser);
+                            localStorage.setItem('keranjangUser', parsed);
+                            // jadi data disimpan dan diambil nantinya dari LocalStorage
+                            }
+                      },
                     mounted() {
+                                    if (localStorage.getItem('keranjangUser')) {
+                                        try {
+                                          this.keranjangUser = JSON.parse(localStorage.getItem('keranjangUser'));
+                                        } catch(e) {
+                                          localStorage.removeItem('keranjangUser');
+                                        }
+                                      }
                                 axios
                                   .get("http://shayna-backend.belajarkoding.com/api/products", {
                                     params: {
