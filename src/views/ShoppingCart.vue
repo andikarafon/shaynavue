@@ -38,7 +38,7 @@
                                         </thead>
                                         <tbody>
 
-                                            <tr v-for="keranjang in keranjangUser" :key=""keranjang.id>
+                                            <tr v-for="keranjang in keranjangUser" :key="keranjang.id">
                                                 <td class="cart-pic first-row">
                                                     <img class="img-cart" :src="keranjang.photo" />
                                                 </td>
