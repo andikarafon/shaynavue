@@ -46,10 +46,12 @@
                                                     <h5>{{ keranjang.name }}</h5>
                                                 </td>
                                                 <td class="p-price first-row">${{ keranjang.price }}</td>
-                                                <td @click="removeItem(keranjangUser.index)" class="delete-item">
-                                                    <a href="#">
-                                                        <i class="material-icons">close</i>
-                                                    </a>
+                                                <td>
+                                                    <router-link v-bind:to="'/cart'">
+                                                        <a @click="removeItem(keranjangUser.index)" href="#" class="delete-item">
+                                                                <i class="material-icons">close</i>
+                                                        </a>
+                                                    </router-link>
                                                 </td>
                                             </tr>
 
@@ -118,7 +120,7 @@
                                     <ul>
                                         <li class="subtotal">ID Transaction <span>#SH12000</span></li>
                                         <li class="subtotal mt-3">Subtotal <span>${{ totalHarga }}.00</span></li>
-                                        <li class="subtotal mt-3">Pajak <span>10%{{ ditambahPajak }}.00</span></li>
+                                        <li class="subtotal mt-3">Pajak <span>10% {{ ditambahPajak }}.00</span></li>
                                         <li class="subtotal mt-3">Total Biaya <span>${{ totalBiaya }}.00</span></li>
                                         <li class="subtotal mt-3">Bank Transfer <span>Mandiri</span></li>
                                         <li class="subtotal mt-3">No. Rekening <span>2208 1996 1403</span></li>
@@ -166,6 +168,7 @@ export default {
     },
     // fungsi mengirim data ke API
     checkout() {
+        // map ini untuk membuat data semua menjadi array
         let productIds = this.keranjangUser.map(function(product) {
             return product.id;
         });
@@ -201,6 +204,7 @@ export default {
   },
   computed: {
     totalHarga() {
+        // reduce adalah fungsi untuk looping, tetapi tidak hanya menampilkan tetapi juga menghitung
       return this.keranjangUser.reduce(function(items, data) {
         return items + data.price;
       }, 0);
