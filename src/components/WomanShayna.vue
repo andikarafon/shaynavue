@@ -24,10 +24,8 @@
                                         </div>
                                         <div class="pi-text">
                                             <div class="catagory-name">{{ itemProduct.type  }}</div>
-                                            <router-link to="/product">
-                                              <a href="#">
+                                            <router-link v-bind:to="'/product/'+itemProduct.id">
                                                 <h5>{{ itemProduct.name }}</h5>
-                                              </a>
                                             </router-link>
                                             <div class="product-price">
                                               ${{ itemProduct.price }}
