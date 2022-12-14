@@ -95,6 +95,9 @@ export default {
                 // cocokkan id dengan id item yang di local storage
                 let index = itemKeranjangUserStorage.findIndex(id => id == idx);
                 this.keranjangUser.splice(index,1);
+
+                const parsed = JSON.stringify(this.keranjangUser);
+                localStorage.setItem("keranjangUser", parsed);
             }
         },
  mounted () {
