@@ -178,14 +178,14 @@ export default {
             email: this.customerInfo.email,
             number: this.customerInfo.number,
             address: this.customerInfo.address,
-            transaction_total: this.totalBiaya,
+            transaction_total: parseInt(this.totalBiaya),
             transaction_status: "PENDING",
             transaction_details: productIds
         };
 
         axios
         .post(
-          "http://shayna-backend.belajarkoding.com/api/checkout",
+          "http://127.0.0.1:8000/api/checkout",
           checkoutData
         )
         .then(() => this.$router.push("success"))
