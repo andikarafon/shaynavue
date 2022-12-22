@@ -48,7 +48,7 @@
                                                 <td class="p-price first-row">${{ keranjang.price }}</td>
                                                 <td>
                                                     <router-link v-bind:to="'/cart'">
-                                                        <a @click="removeItem(keranjangUser.index)" href="#" class="delete-item">
+                                                        <a @click="removeItem(keranjangUser.id)" href="#" class="delete-item">
                                                                 <i class="material-icons">close</i>
                                                         </a>
                                                     </router-link>
@@ -123,8 +123,8 @@
                                         <li class="subtotal mt-3">Pajak <span>10% {{ ditambahPajak }}.00</span></li>
                                         <li class="subtotal mt-3">Total Biaya <span>${{ totalBiaya }}.00</span></li>
                                         <li class="subtotal mt-3">Bank Transfer <span>Mandiri</span></li>
-                                        <li class="subtotal mt-3">No. Rekening <span>2208 1996 1403</span></li>
-                                        <li class="subtotal mt-3">Nama Penerima <span>Shayna</span></li>
+                                        <li class="subtotal mt-3">No. Rekening <span>105 001 0392243</span></li>
+                                        <li class="subtotal mt-3">Nama Penerima <span>Ayara</span></li>
                                     </ul>
                                     <!-- <router-link v-bind:to="'/success'"  class="proceed-btn">I ALREADY PAID</router-link> -->
                                     <a @click="checkout()" href="#" class="proceed-btn">I ALREADY PAID</a>
@@ -165,6 +165,8 @@ export default {
         this.keranjangUser.splice(index, 1);
         const parsed = JSON.stringify(this.keranjangUser);
         localStorage.setItem("keranjangUser", parsed);
+
+        window.location.reload();
     },
     // fungsi mengirim data ke API
     checkout() {
@@ -191,6 +193,8 @@ export default {
         .then(() => this.$router.push("success"))
         // eslint-disable-next-line no-console
         .catch(err => console.log(err));
+
+        localStorage.clear();
     }
   },
   mounted() {
